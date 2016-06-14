@@ -112,6 +112,7 @@ class ACUDPClient(object):
             elif type_ == act.ACSP_ERROR:
                 log.debug("ACSP_ERROR")
                 event.update({'message': readString32(file_obj)})
+                log.error(event)
             elif type_ == act.ACSP_NEW_CONNECTION:
                 log.debug("ACSP_NEW_CONNECTION")
                 event.update({

@@ -1,5 +1,7 @@
 # ACUDPClient
 
+[![Build Status](https://travis-ci.org/joaoubaldo/acudpclient.svg?branch=master)](https://travis-ci.org/joaoubaldo/acudpclient)
+
 ACUDPClient is module that can be used to communicate with an Assetto Corsa
 server using its UDP protocol.
 

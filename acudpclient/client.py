@@ -14,8 +14,6 @@ log = logging.getLogger("ac_udp_client")
 
 
 class ACUDPClient(object):
-    HOST = "192.168.124.1"
-
     @classmethod
     def consume_event(cls, file_obj):
         try:
@@ -150,10 +148,11 @@ class ACUDPClient(object):
 
         return event
 
-    def __init__(self, port=10000, remote_port=10001):
+    def __init__(self, port=10000, remote_port=10001, host='127.0.0.1'):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_address = ('0.0.0.0', port)
         self.remote_port = remote_port
+        self.host = host
         self._subscribers = {}
 
     def listen(self):
@@ -193,7 +192,7 @@ class ACUDPClient(object):
             size,
             message.encode('utf32')
         )
-        self.sock.sendto(data, (ACUDPClient.HOST, self.remote_port))
+        self.sock.sendto(data, (self.host, self.remote_port))
 
     def send_message(self, car_id, message):
         size = len(message)
@@ -205,25 +204,25 @@ class ACUDPClient(object):
             size,
             message.encode('utf32')
         )
-        self.sock.sendto(data, (ACUDPClient.HOST, self.remote_port))
+        self.sock.sendto(data, (self.host, self.remote_port))
 
     def get_car_info(self, car_id):
         data = struct.pack("BB",
             ACUDPProtoTypes.ACSP_GET_CAR_INFO,
             car_id
         )
-        self.sock.sendto(data, (ACUDPClient.HOST, self.remote_port))
+        self.sock.sendto(data, (self.host, self.remote_port))
 
     def get_session_info(self, session_index=-1):
         data = struct.pack("<Bh",
             ACUDPProtoTypes.ACSP_GET_SESSION_INFO,
             session_index
         )
-        self.sock.sendto(data, (ACUDPClient.HOST, self.remote_port))
+        self.sock.sendto(data, (self.host, self.remote_port))
 
     def enable_realtime_report(self, hz_ms=1000):
         data = struct.pack("<BH",
             ACUDPProtoTypes.ACSP_REALTIMEPOS_INTERVAL,
             hz_ms
         )
-        self.sock.sendto(data, (ACUDPClient.HOST, self.remote_port))
+        self.sock.sendto(data, (self.host, self.remote_port))

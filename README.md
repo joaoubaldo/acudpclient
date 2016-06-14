@@ -13,7 +13,7 @@ $ python setup.py install
 or
 
 ```bash
-$ pip install acss
+$ pip install acudpclient
 ```
 
 (virtualenv is recommended)

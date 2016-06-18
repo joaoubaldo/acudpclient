@@ -1,1 +1,5 @@
-VERSION = "0.9.5"
+"""
+ACUDPClient module
+"""
+
+VERSION = "1.0.0"

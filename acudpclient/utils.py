@@ -1,28 +1,30 @@
-import struct
+"""
+Utils module
+"""
+import logging
+
+from acudpclient.types import Uint8
+from acudpclient.packets import ACUDPPacket
 
 
-def readByte(f):
-    return struct.unpack('B', f.read(1))[0]
+LOG = logging.getLogger("ac_udp_utils")
 
-def readSingle(f):
-    return struct.unpack('<f', f.read(4))[0]
 
-def readVector3f(f):
-    return {'x':readSingle(f), 'y':readSingle(f), 'z':readSingle(f)}
+def consume_event(file_obj):
+    """
+    Read event from file-like object buffer. File position will be changed.
+    """
+    try:
+        type_ = Uint8.get(file_obj)
+    except Exception:
+        return None
 
-def readString32(f):
-    length = readByte(f)
-    return f.read(length*4).decode('utf32')
-
-def readString8(f):
-    length = readByte(f)
-    return f.read(length).decode('ascii')
-
-def readUInt16(f):
-    return struct.unpack('<H', f.read(2))[0]
-
-def readUInt32(f):
-    return struct.unpack('<L', f.read(4))[0]
-
-def readInt32(f):
-    return struct.unpack('<l', f.read(4))[0]
+    if type_ in ACUDPPacket.packets:
+        cls_ = ACUDPPacket.packets[type_]
+        try:
+            return cls_.from_file(file_obj)
+        except Exception, exc:
+            LOG.error(exc)
+            return None
+    else:
+        raise NotImplementedError("Type not implemented %d" % (type_,))

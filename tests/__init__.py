@@ -1,9 +1,11 @@
+import sys
 import base64
 from StringIO import StringIO
 import unittest
 
 from acudpclient.client import ACUDPClient
 from acudpclient.types import ACUDPProtoTypes
+from acudpclient.utils import consume_event
 
 
 class TestClient(unittest.TestCase):
@@ -13,15 +15,14 @@ class TestClient(unittest.TestCase):
             AABhAAAAYwAAAGUAAAAgAAAAIQAAACAAAABmAAAAYQAAAGMAAAB0AAAAbwAAAHIAAAB5AAAAIAAA
             AHQAAABjAAAAIAAAACYAAAAgAAAAYQAAAGIAAABzAAAABW1vbnphAAdRdWFsaWZ5Ah4AAAAAABkg
             BzNfY2xlYXIAAAAA"""
-        f = StringIO(base64.b64decode(data))
-        event = ACUDPClient.consume_event(f)
-        self.assertEqual(event['proto_version'], 4)
-        self.assertEqual(event['type'], ACUDPProtoTypes.ACSP_VERSION)
-
-        event = ACUDPClient.consume_event(f)
-        self.assertEqual(event['track_temp'], 32)
-        self.assertEqual(event['name'], u'Qualify')
-
+        data = StringIO(base64.b64decode(data))
+        count = 0
+        while 1:
+            event = consume_event(data)
+            if event is None:
+                break
+            count += 1
+        self.assertEqual(count, 2)
 
 if __name__ == '__main__':
     unittest.main()

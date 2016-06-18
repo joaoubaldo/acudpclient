@@ -1,3 +1,7 @@
+from collections import defaultdict
+import struct
+
+
 class ACUDPProtoTypes(object):
     ACSP_ADMIN_COMMAND = 209
     ACSP_BROADCAST_CHAT = 203
@@ -32,3 +36,56 @@ class ACUDPProtoTypes(object):
                 if getattr(cls, attr) == id_:
                     return attr
         return None
+
+
+class ACUDPStruct(object):
+    def __init__(self, fmt, formatter=lambda x: x):
+        self.fmt = fmt
+        self.formatter = formatter
+
+    def size(self):
+        return struct.calcsize(self.fmt)
+
+    def get(self, f, context=None):
+        data = struct.unpack(self.fmt, f.read(self.size()))
+        if len(data) == 1:
+            return self.formatter(data[0])
+        return self.formatter(data)
+
+
+class ACUDPString(object):
+    def __init__(self, char_size, decoder=lambda x: x.decode('ascii')):
+        self.char_size = char_size
+        self.decoder = decoder
+
+    def get(self, f, context=None):
+        size = Uint8.get(f)
+        return self.decoder(f.read(self.char_size*size))
+
+
+class ACUDPConditionalStruct(object):
+    def __init__(self, ac_struct, formatter=lambda x: x,
+    cond_func=lambda x: True, default=''):
+        self.ac_struct = ac_struct
+        self.cond_func = cond_func
+        self.default = default
+
+    def size(self):
+        return self.ac_struct.size()
+
+    def get(self, f, context=None):
+        if not self.cond_func(context):
+            return self.default
+        return self.ac_struct.get(f, context)
+
+
+Uint8 = ACUDPStruct('B')
+Bool = ACUDPStruct('B', formatter=lambda x: x != 0)
+Uint16 = ACUDPStruct('H')
+Int16 = ACUDPStruct('h')
+Uint32 = ACUDPStruct('I')
+Int32 = ACUDPStruct('i')
+Float = ACUDPStruct('f')
+Vector3f = ACUDPStruct('fff')
+UTF32 = ACUDPString(4, decoder=lambda x: x.decode('utf32'))
+ASCII = ACUDPString(1, decoder=lambda x: x.decode('ascii'))

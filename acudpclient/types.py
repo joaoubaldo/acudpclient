@@ -1,4 +1,3 @@
-from collections import defaultdict
 import struct
 
 
@@ -46,8 +45,8 @@ class ACUDPStruct(object):
     def size(self):
         return struct.calcsize(self.fmt)
 
-    def get(self, f, context=None):
-        data = struct.unpack(self.fmt, f.read(self.size()))
+    def get(self, file_obj):
+        data = struct.unpack(self.fmt, file_obj.read(self.size()))
         if len(data) == 1:
             return self.formatter(data[0])
         return self.formatter(data)
@@ -58,34 +57,35 @@ class ACUDPString(object):
         self.char_size = char_size
         self.decoder = decoder
 
-    def get(self, f, context=None):
-        size = Uint8.get(f)
-        return self.decoder(f.read(self.char_size*size))
+    def get(self, file_obj):
+        size = UINT8.get(file_obj)
+        return self.decoder(file_obj.read(self.char_size*size))
 
 
 class ACUDPConditionalStruct(object):
     def __init__(self, ac_struct, formatter=lambda x: x,
-    cond_func=lambda x: True, default=''):
+                 cond_func=lambda x: True, default=''):
         self.ac_struct = ac_struct
         self.cond_func = cond_func
         self.default = default
+        self.formatter = formatter
 
     def size(self):
         return self.ac_struct.size()
 
-    def get(self, f, context=None):
+    def get(self, file_obj, context=None):
         if not self.cond_func(context):
             return self.default
-        return self.ac_struct.get(f, context)
+        return self.formatter(self.ac_struct.get(file_obj, context))
 
 
-Uint8 = ACUDPStruct('B')
-Bool = ACUDPStruct('B', formatter=lambda x: x != 0)
-Uint16 = ACUDPStruct('H')
-Int16 = ACUDPStruct('h')
-Uint32 = ACUDPStruct('I')
-Int32 = ACUDPStruct('i')
-Float = ACUDPStruct('f')
-Vector3f = ACUDPStruct('fff')
+UINT8 = ACUDPStruct('B')
+BOOL = ACUDPStruct('B', formatter=lambda x: x != 0)
+UINT16 = ACUDPStruct('H')
+INT16 = ACUDPStruct('h')
+UINT32 = ACUDPStruct('I')
+INT32 = ACUDPStruct('i')
+FLOAT = ACUDPStruct('f')
+VECTOR3F = ACUDPStruct('fff')
 UTF32 = ACUDPString(4, decoder=lambda x: x.decode('utf32'))
 ASCII = ACUDPString(1, decoder=lambda x: x.decode('ascii'))

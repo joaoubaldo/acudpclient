@@ -1,61 +1,105 @@
+"""
+A collection of base classes to be used by packet related classes.
+"""
 import logging
 
-from acudpclient.types import Uint8
+from acudpclient.types import UINT8
+from acudpclient.types import ACUDPProtoTypes
 
 
 LOG = logging.getLogger("ac_udp_packets")
 
 
+class ACUDPPacketMeta(type):
+    """ This is the Metaclass for ACUDPPacket, that tracks all of its
+    subclasses. """
+    packets = {}
+
+    def __new__(mcs, name, bases, dct):
+        klass = type.__new__(mcs, name, bases, dct)
+        if len(klass.mro()[1:-1]) == 1:
+            mcs.packets[klass._type] = klass
+            LOG.info("Registered new packet %s", name)
+        return klass
+
+
 class ACUDPPacket(object):
+    """ This class represents an AC UDP message, having a message type
+    and byte data. Type and bytes should be defined at class level by each
+    packet. """
+    __metaclass__ = ACUDPPacketMeta
+
     @classmethod
     def from_file(cls, file_obj):
+        """ Create a packet instance from bytes read from a file-like object.
+        This class method is only meant to be called on subclasses that
+        define _bytes and _type class properties.
+
+        Keyword arguments:
+        file_obj -- file-like object to read bytes from
+
+        Return new packet instance.
+        """
         instance = cls()
         for name, data_type in cls._bytes:
-            val = data_type.get(file_obj, context=instance)
+            val = data_type.get(file_obj)
             setattr(instance, name, val)
         return instance
 
-    class __metaclass__(type):
-        packets = {}
-
-        def __new__(meta, name, bases, dct):
-            klass = type.__new__(meta, name, bases, dct)
-            if len(klass.mro()[1:-1]) == 1:
-                meta.packets[klass._type] = klass
-                LOG.info("Registered new packet %s" % (name,))
-            return klass
-
     def __repr__(self):
-        s = "<Packet(%s) %s>" % (ACUDPProtoTypes.id_to_name(self._type),
+        output = "<Packet(%s) %s>" % (
+            ACUDPProtoTypes.id_to_name(self._type),
             ' '.join(["%s='%s'" % (name, repr(getattr(self, name, ''))) \
-                    for name, bytes_ in self._bytes]))
-        return s.encode('utf-8')
+                    for name, _ in self._bytes])
+            )
+        return output.encode('utf-8')
 
 
 class ACUDPPacketData(object):
+    """ This class represents part of an AC UDP message (ACUDPPacket). It's
+    specially useful to define a block of data that repeats. """
+
     @classmethod
     def from_file(cls, file_obj):
+        """ Create a packet data instance from bytes read from a file-like
+        object. This class method is only meant to be called on subclasses that
+        define _bytes class properties (and not _type).
+
+        Keyword arguments:
+        file_obj -- file-like object to read bytes from
+
+        Return new packet data instance.
+        """
         instance = cls()
         for name, data_type in cls._bytes:
-            val = data_type.get(file_obj, context=instance)
+            val = data_type.get(file_obj)
             setattr(instance, name, val)
         return instance
 
 
     def __repr__(self):
-        s = "<%s>" % (
+        output = "<%s>" % (
             ' '.join(["%s='%s'" % (name, repr(getattr(self, name, ''))) \
-                for name, bytes_ in self._bytes]))
-        return s.encode('utf-8')
+                for name, _ in self._bytes]))
+        return output.encode('utf-8')
 
 
 class ACUDPPacketDataArray(object):
+    """ This class represents an array of packet data (ACUDPPacketData). """
     def __init__(self, packet_data):
         self.packet_data = packet_data
 
-    def get(self, f, context=None):
-        size = Uint8.get(f)
+    def get(self, file_obj):
+        """ Reads next byte as a byte representing the total number of packet
+        data blocks that exist in the buffer and reads them.
+
+        Keyword arguments:
+        file_obj -- file-like object to read bytes from
+
+        Return list of read ACUDPPacketData blocks.
+        """
+        size = UINT8.get(file_obj)
         res = []
-        for i in range(size):
-            res.append(self.packet_data.from_file(f))
+        for _ in range(size):
+            res.append(self.packet_data.from_file(file_obj))
         return res

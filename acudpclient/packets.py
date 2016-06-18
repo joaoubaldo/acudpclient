@@ -3,11 +3,12 @@ Module where AC UDP packets are defined.
 """
 import logging
 
-from acudpclient.types import Uint8
-from acudpclient.types import Uint16
-from acudpclient.types import Uint32
-from acudpclient.types import Float
-from acudpclient.types import Vector3f
+from acudpclient.types import UINT8
+from acudpclient.types import UINT16
+from acudpclient.types import UINT32
+from acudpclient.types import BOOL
+from acudpclient.types import FLOAT
+from acudpclient.types import VECTOR3F
 from acudpclient.types import UTF32
 from acudpclient.types import ASCII
 from acudpclient.types import ACUDPProtoTypes
@@ -23,19 +24,19 @@ class Version(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_VERSION
     _bytes = (
-        ('proto_version', Uint8),
+        ('proto_version', UINT8),
     )
 
 class CarUpdate(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_CAR_UPDATE
     _bytes = (
-        ('car_id', Uint8),
-        ('pos', Vector3f),
-        ('vel', Vector3f),
-        ('gear', Uint8),
-        ('engine_rpm', Uint16),
-        ('normalized_spline_pos', Float)
+        ('car_id', UINT8),
+        ('pos', VECTOR3F),
+        ('vel', VECTOR3F),
+        ('gear', UINT8),
+        ('engine_rpm', UINT16),
+        ('normalized_spline_pos', FLOAT)
     )
 
 
@@ -43,16 +44,16 @@ class ClientEvent(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_CLIENT_EVENT
     _bytes = (
-        ('ev_type', Uint8),
-        ('car_id', Uint8),
-        ('other_car_id', ACUDPConditionalStruct(Uint8,
+        ('ev_type', UINT8),
+        ('car_id', UINT8),
+        ('other_car_id', ACUDPConditionalStruct(UINT8,
                                                 cond_func=lambda x: True \
                 if x.ev_type == ACUDPProtoTypes.ACSP_CE_COLLISION_WITH_CAR \
                 else False,
                                                 default=255)),
-        ('impact_speed', Float),
-        ('world_pos', Vector3f),
-        ('rel_pos', Vector3f)
+        ('impact_speed', FLOAT),
+        ('world_pos', VECTOR3F),
+        ('rel_pos', VECTOR3F)
     )
 
 
@@ -60,8 +61,8 @@ class CarInfo(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_CAR_INFO
     _bytes = (
-        ('car_id', Uint8),
-        ('is_connected', Uint8),
+        ('car_id', UINT8),
+        ('is_connected', BOOL),
         ('car_model', UTF32),
         ('car_skin', UTF32),
         ('driver_name', UTF32),
@@ -73,7 +74,7 @@ class Chat(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_CHAT
     _bytes = (
-        ('car_id', Uint8),
+        ('car_id', UINT8),
         ('message', UTF32)
     )
 
@@ -81,9 +82,9 @@ class Chat(ACUDPPacket):
 class LeaderboardEntry(ACUDPPacketData):
     """Packet data used in LapCompleted"""
     _bytes = (
-        ('rcar_id', Uint8),
-        ('rtime', Uint32),
-        ('rlaps', Uint16)
+        ('rcar_id', UINT8),
+        ('rtime', UINT32),
+        ('rlaps', UINT16)
     )
 
 
@@ -91,11 +92,11 @@ class LapCompleted(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_LAP_COMPLETED
     _bytes = (
-        ('car_id', Uint8),
-        ('lap_time', Uint32),
-        ('cuts', Uint8),
+        ('car_id', UINT8),
+        ('lap_time', UINT32),
+        ('cuts', UINT8),
         ('cars', ACUDPPacketDataArray(LeaderboardEntry)),
-        ('grip_level', Float)
+        ('grip_level', FLOAT)
     )
 
 class EndSession(ACUDPPacket):
@@ -110,7 +111,7 @@ class ClientLoaded(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_CLIENT_LOADED
     _bytes = (
-        ('car_id', Uint8),
+        ('car_id', UINT8),
     )
 
 
@@ -120,7 +121,7 @@ class ConnectiontClosed(ACUDPPacket):
     _bytes = (
         ('driver_name', UTF32),
         ('driver_guid', UTF32),
-        ('car_id', Uint8),
+        ('car_id', UINT8),
         ('car_model', ASCII),
         ('car_skin', ASCII)
     )
@@ -140,7 +141,7 @@ class NewConnection(ACUDPPacket):
     _bytes = (
         ('driver_name', UTF32),
         ('driver_guid', UTF32),
-        ('car_id', Uint8),
+        ('car_id', UINT8),
         ('car_model', ASCII),
         ('car_skin', ASCII)
     )
@@ -150,22 +151,22 @@ class SessionInfo(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_SESSION_INFO
     _bytes = (
-        ('proto_version', Uint8),
-        ('session_index', Uint8),
-        ('current_sess_index', Uint8),
-        ('session_count', Uint8),
+        ('proto_version', UINT8),
+        ('session_index', UINT8),
+        ('current_sess_index', UINT8),
+        ('session_count', UINT8),
         ('server_name', UTF32),
         ('track_name', ASCII),
         ('track_config', ASCII),
         ('name', ASCII),
-        ('session_type', Uint8),
-        ('time', Uint16),
-        ('laps', Uint16),
-        ('wait_time', Uint16),
-        ('ambient_temp', Uint8),
-        ('track_temp', Uint8),
+        ('session_type', UINT8),
+        ('time', UINT16),
+        ('laps', UINT16),
+        ('wait_time', UINT16),
+        ('ambient_temp', UINT8),
+        ('track_temp', UINT8),
         ('weather_graph', ASCII),
-        ('elapsed_ms', Uint32)
+        ('elapsed_ms', UINT32)
     )
 
 
@@ -173,20 +174,20 @@ class NewSession(ACUDPPacket):
     """Packet"""
     _type = ACUDPProtoTypes.ACSP_NEW_SESSION
     _bytes = (
-        ('proto_version', Uint8),
-        ('session_index', Uint8),
-        ('current_sess_index', Uint8),
-        ('session_count', Uint8),
+        ('proto_version', UINT8),
+        ('session_index', UINT8),
+        ('current_sess_index', UINT8),
+        ('session_count', UINT8),
         ('server_name', UTF32),
         ('track_name', ASCII),
         ('track_config', ASCII),
         ('name', ASCII),
-        ('session_type', Uint8),
-        ('time', Uint16),
-        ('laps', Uint16),
-        ('wait_time', Uint16),
-        ('ambient_temp', Uint8),
-        ('track_temp', Uint8),
+        ('session_type', UINT8),
+        ('time', UINT16),
+        ('laps', UINT16),
+        ('wait_time', UINT16),
+        ('ambient_temp', UINT8),
+        ('track_temp', UINT8),
         ('weather_graph', ASCII),
-        ('elapsed_ms', Uint32)
+        ('elapsed_ms', UINT32)
     )

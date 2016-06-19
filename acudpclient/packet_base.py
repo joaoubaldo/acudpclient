@@ -30,10 +30,33 @@ class ACUDPPacket(object):
     __metaclass__ = ACUDPPacketMeta
 
     @classmethod
+    def factory(cls, file_obj):
+        """ Read an event from a file-like object.
+        It first reads the packet type, as defined in AC UDP proto, then looks
+        for it in the registered type classes. If type cannot be found, the
+        exception NotImplementedError will be raised, otherwise from_file() is
+        called on that type class.
+        Note: file_obj position will be changed after calling this method.
+
+        Keyword arguments:
+        file_obj -- file-like object to read the event from.
+
+        Return event object (subclass of ACUDPPacket).
+        """
+        type_ = UINT8.get(file_obj)
+
+        if type_ in ACUDPPacket.packets:
+            cls_ = ACUDPPacket.packets[type_]
+            return cls_.from_file(file_obj)
+        else:
+            raise NotImplementedError("Type not implemented %d" % (type_,))
+
+    @classmethod
     def from_file(cls, file_obj):
         """ Create a packet instance from bytes read from a file-like object.
         This class method is only meant to be called on subclasses that
         define _bytes and _type class properties.
+        Note: file_obj position will be changed after calling this function.
 
         Keyword arguments:
         file_obj -- file-like object to read bytes from

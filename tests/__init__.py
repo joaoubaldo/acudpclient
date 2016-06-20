@@ -5,7 +5,7 @@ import unittest
 
 from acudpclient.client import ACUDPClient
 from acudpclient.types import ACUDPProtoTypes
-from acudpclient.utils import consume_event
+from acudpclient.packet_base import ACUDPPacket
 
 
 class TestClient(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestClient(unittest.TestCase):
         data = StringIO(base64.b64decode(data))
         count = 0
         while 1:
-            event = consume_event(data)
+            event = ACUDPPacket.consume_event(data)
             if event is None:
                 break
             count += 1

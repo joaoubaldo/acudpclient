@@ -11,11 +11,12 @@ from acudpclient.types import FLOAT
 from acudpclient.types import VECTOR3F
 from acudpclient.types import UTF32
 from acudpclient.types import ASCII
-from acudpclient.types import ACUDPProtoTypes
 from acudpclient.types import ACUDPConditionalStruct
+from acudpclient.protocol import ACUDPProtoTypes
 from acudpclient.packet_base import ACUDPPacket
 from acudpclient.packet_base import ACUDPPacketData
 from acudpclient.packet_base import ACUDPPacketDataArray
+
 
 LOG = logging.getLogger("ac_udp_packets")
 

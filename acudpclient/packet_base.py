@@ -1,10 +1,12 @@
 """
-A collection of base classes to be used by packet related classes.
+Collection of base classes to be used by packet related classes.
 """
 import logging
+import struct
 
+from acudpclient.protocol import ACUDPProtoTypes
 from acudpclient.types import UINT8
-from acudpclient.types import ACUDPProtoTypes
+from acudpclient.exceptions import NotEnoughBytes
 
 
 LOG = logging.getLogger("ac_udp_packets")
@@ -18,13 +20,13 @@ class ACUDPPacketMeta(type):
     def __new__(mcs, name, bases, dct):
         klass = type.__new__(mcs, name, bases, dct)
         if len(klass.mro()[1:-1]) == 1:
-            mcs.packets[klass._type] = klass
             LOG.info("Registered new packet %s", name)
+            mcs.packets[klass._type] = klass
         return klass
 
 
 class ACUDPPacket(object):
-    """ This class represents an AC UDP message, having a message type
+    """ This is the base class for AC UDP events, having a message type
     and byte data. Type and bytes should be defined at class level by each
     packet. """
     __metaclass__ = ACUDPPacketMeta
@@ -43,13 +45,15 @@ class ACUDPPacket(object):
 
         Return event object (subclass of ACUDPPacket).
         """
-        type_ = UINT8.get(file_obj)
-
-        if type_ in ACUDPPacket.packets:
-            cls_ = ACUDPPacket.packets[type_]
-            return cls_.from_file(file_obj)
-        else:
-            raise NotImplementedError("Type not implemented %d" % (type_,))
+        try:
+            type_ = UINT8.get(file_obj)
+            if type_ in ACUDPPacket.packets:
+                class_ = ACUDPPacket.packets[type_]
+                return class_.from_file(file_obj)
+            else:
+                raise NotImplementedError("Type not implemented %s" % (type_,))
+        except struct.error:
+            raise NotEnoughBytes
 
     @classmethod
     def from_file(cls, file_obj):

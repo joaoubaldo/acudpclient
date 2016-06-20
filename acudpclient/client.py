@@ -6,8 +6,8 @@ import socket
 import logging
 import io
 
-from acudpclient.utils import consume_event
-from acudpclient.types import ACUDPProtoTypes
+from acudpclient.protocol import ACUDPProtoTypes
+from acudpclient.packet_base import ACUDPPacket
 
 
 logging.basicConfig(level=logging.ERROR)
@@ -73,7 +73,7 @@ class ACUDPClient(object):
 
         Return the event object (subclass of ACUDPPacket) or None if there's
         no event ready. """
-        event = consume_event(self.file)
+        event = ACUDPPacket.factory(self.file)
         if event and call_subscribers:
             for subs in self._subscribers.itervalues():
                 type_ = ACUDPProtoTypes.id_to_name(event['type'])

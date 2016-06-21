@@ -4,24 +4,29 @@ from StringIO import StringIO
 import unittest
 
 from acudpclient.client import ACUDPClient
-from acudpclient.types import ACUDPProtoTypes
+from acudpclient.protocol import ACUDPConst
 from acudpclient.packet_base import ACUDPPacket
+from acudpclient.exceptions import NotEnoughBytes
+import acudpclient.packets
 
 
 class TestClient(unittest.TestCase):
-    def test_consume_event(self):
+    def test_event_factory(self):
         data = """OAQyBAAAAjFBAAAAQwAAACAAAAAhAAAAIAAAAEoAAABVAAAAIAAAADIAAAA0AAAALgAAADcAAAAg
             AAAAIQAAACAAAAAzAAAAMAAAAHEAAAB1AAAAYQAAAGwAAABpAAAAIAAAACEAAAAgAAAANwAAAHIA
             AABhAAAAYwAAAGUAAAAgAAAAIQAAACAAAABmAAAAYQAAAGMAAAB0AAAAbwAAAHIAAAB5AAAAIAAA
             AHQAAABjAAAAIAAAACYAAAAgAAAAYQAAAGIAAABzAAAABW1vbnphAAdRdWFsaWZ5Ah4AAAAAABkg
             BzNfY2xlYXIAAAAA"""
-        data = StringIO(base64.b64decode(data))
+        file_obj = StringIO(base64.b64decode(data))
         count = 0
         while 1:
-            event = ACUDPPacket.consume_event(data)
-            if event is None:
+            try:
+                event = ACUDPPacket.factory(file_obj)
+            except NotEnoughBytes:
                 break
-            count += 1
+            else:
+                print event
+                count += 1
         self.assertEqual(count, 2)
 
 if __name__ == '__main__':

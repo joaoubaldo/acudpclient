@@ -6,7 +6,7 @@ import socket
 import logging
 import io
 
-from acudpclient.protocol import ACUDPProtoTypes
+from acudpclient.protocol import ACUDPConst
 from acudpclient.packet_base import ACUDPPacket
 
 
@@ -76,7 +76,7 @@ class ACUDPClient(object):
         event = ACUDPPacket.factory(self.file)
         if event and call_subscribers:
             for subs in self._subscribers.itervalues():
-                type_ = ACUDPProtoTypes.id_to_name(event['type'])
+                type_ = ACUDPConst.id_to_name(event['type'])
                 method_name = 'on_%s' % (type_,)
                 method = getattr(subs, method_name, None)
                 if method and callable(method):
@@ -92,7 +92,7 @@ class ACUDPClient(object):
         if size > 255:
             raise ValueError('Message is too large')
         data = struct.pack("BB%ds" % (size*4,),
-                           ACUDPProtoTypes.ACSP_BROADCAST_CHAT,
+                           ACUDPConst.ACSP_BROADCAST_CHAT,
                            size,
                            message.encode('utf32')
                           )
@@ -110,7 +110,7 @@ class ACUDPClient(object):
         if size > 255:
             raise ValueError('Message is too large')
         data = struct.pack("BBB%ds" % (size*4,),
-                           ACUDPProtoTypes.ACSP_SEND_CHAT,
+                           ACUDPConst.ACSP_SEND_CHAT,
                            car_id,
                            size,
                            message.encode('utf32')
@@ -125,7 +125,7 @@ class ACUDPClient(object):
         Keyword arguments:
         car_id -- the driver id we want """
         data = struct.pack("BB",
-                           ACUDPProtoTypes.ACSP_GET_CAR_INFO,
+                           ACUDPConst.ACSP_GET_CAR_INFO,
                            car_id
                           )
         sent = self.sock.sendto(data, (self.host, self.remote_port))
@@ -138,7 +138,7 @@ class ACUDPClient(object):
         Keyword arguments:
         session_index -- the session we want (default: -1 - current session) """
         data = struct.pack("<Bh",
-                           ACUDPProtoTypes.ACSP_GET_SESSION_INFO,
+                           ACUDPConst.ACSP_GET_SESSION_INFO,
                            session_index
                           )
         sent = self.sock.sendto(data, (self.host, self.remote_port))
@@ -152,7 +152,7 @@ class ACUDPClient(object):
         hz_ms -- the frequency we want to get reports, in milliseconds. Use 0
         to disable real time reporting (default: 1000) """
         data = struct.pack("<BH",
-                           ACUDPProtoTypes.ACSP_REALTIMEPOS_INTERVAL,
+                           ACUDPConst.ACSP_REALTIMEPOS_INTERVAL,
                            hz_ms
                           )
         sent = self.sock.sendto(data, (self.host, self.remote_port))

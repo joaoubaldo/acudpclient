@@ -1,6 +1,8 @@
-""" Module used to define AC protocol properties """
+""" AC protocol properties """
 
-class ACUDPProtoTypes(object):
+
+class ACUDPConst(object):
+    """ Constants used in AC UDP protocol """
     ACSP_ADMIN_COMMAND = 209
     ACSP_BROADCAST_CHAT = 203
     ACSP_CAR_INFO = 54
@@ -29,6 +31,13 @@ class ACUDPProtoTypes(object):
 
     @classmethod
     def id_to_name(cls, id_):
+        """ Convert a constant id to name.
+
+        Keyword arguments:
+        id_ -- constant id
+
+        Return constant name.
+        """
         for attr in cls.__dict__.keys():
             if attr.startswith('ACSP_'):
                 if getattr(cls, attr) == id_:

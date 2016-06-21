@@ -1,3 +1,5 @@
+""" This module declares core C types used by AC UDP protocol """
+
 import struct
 
 

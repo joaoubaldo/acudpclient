@@ -12,7 +12,7 @@ from acudpclient.types import VECTOR3F
 from acudpclient.types import UTF32
 from acudpclient.types import ASCII
 from acudpclient.types import ACUDPConditionalStruct
-from acudpclient.protocol import ACUDPProtoTypes
+from acudpclient.protocol import ACUDPConst
 from acudpclient.packet_base import ACUDPPacket
 from acudpclient.packet_base import ACUDPPacketData
 from acudpclient.packet_base import ACUDPPacketDataArray
@@ -23,14 +23,14 @@ LOG = logging.getLogger("ac_udp_packets")
 
 class Version(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_VERSION
+    _type = ACUDPConst.ACSP_VERSION
     _bytes = (
         ('proto_version', UINT8),
     )
 
 class CarUpdate(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_CAR_UPDATE
+    _type = ACUDPConst.ACSP_CAR_UPDATE
     _bytes = (
         ('car_id', UINT8),
         ('pos', VECTOR3F),
@@ -43,13 +43,13 @@ class CarUpdate(ACUDPPacket):
 
 class ClientEvent(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_CLIENT_EVENT
+    _type = ACUDPConst.ACSP_CLIENT_EVENT
     _bytes = (
         ('ev_type', UINT8),
         ('car_id', UINT8),
         ('other_car_id', ACUDPConditionalStruct(UINT8,
                                                 cond_func=lambda x: True \
-                if x.ev_type == ACUDPProtoTypes.ACSP_CE_COLLISION_WITH_CAR \
+                if x.ev_type == ACUDPConst.ACSP_CE_COLLISION_WITH_CAR \
                 else False,
                                                 default=255)),
         ('impact_speed', FLOAT),
@@ -60,7 +60,7 @@ class ClientEvent(ACUDPPacket):
 
 class CarInfo(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_CAR_INFO
+    _type = ACUDPConst.ACSP_CAR_INFO
     _bytes = (
         ('car_id', UINT8),
         ('is_connected', BOOL),
@@ -73,7 +73,7 @@ class CarInfo(ACUDPPacket):
 
 class Chat(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_CHAT
+    _type = ACUDPConst.ACSP_CHAT
     _bytes = (
         ('car_id', UINT8),
         ('message', UTF32)
@@ -91,7 +91,7 @@ class LeaderboardEntry(ACUDPPacketData):
 
 class LapCompleted(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_LAP_COMPLETED
+    _type = ACUDPConst.ACSP_LAP_COMPLETED
     _bytes = (
         ('car_id', UINT8),
         ('lap_time', UINT32),
@@ -102,7 +102,7 @@ class LapCompleted(ACUDPPacket):
 
 class EndSession(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_END_SESSION
+    _type = ACUDPConst.ACSP_END_SESSION
     _bytes = (
         ('filename', UTF32),
     )
@@ -110,7 +110,7 @@ class EndSession(ACUDPPacket):
 
 class ClientLoaded(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_CLIENT_LOADED
+    _type = ACUDPConst.ACSP_CLIENT_LOADED
     _bytes = (
         ('car_id', UINT8),
     )
@@ -118,7 +118,7 @@ class ClientLoaded(ACUDPPacket):
 
 class ConnectiontClosed(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_CONNECTION_CLOSED
+    _type = ACUDPConst.ACSP_CONNECTION_CLOSED
     _bytes = (
         ('driver_name', UTF32),
         ('driver_guid', UTF32),
@@ -130,7 +130,7 @@ class ConnectiontClosed(ACUDPPacket):
 
 class Error(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_ERROR
+    _type = ACUDPConst.ACSP_ERROR
     _bytes = (
         ('message', UTF32),
     )
@@ -138,7 +138,7 @@ class Error(ACUDPPacket):
 
 class NewConnection(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_NEW_CONNECTION
+    _type = ACUDPConst.ACSP_NEW_CONNECTION
     _bytes = (
         ('driver_name', UTF32),
         ('driver_guid', UTF32),
@@ -150,7 +150,7 @@ class NewConnection(ACUDPPacket):
 
 class SessionInfo(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_SESSION_INFO
+    _type = ACUDPConst.ACSP_SESSION_INFO
     _bytes = (
         ('proto_version', UINT8),
         ('session_index', UINT8),
@@ -173,7 +173,7 @@ class SessionInfo(ACUDPPacket):
 
 class NewSession(ACUDPPacket):
     """Packet"""
-    _type = ACUDPProtoTypes.ACSP_NEW_SESSION
+    _type = ACUDPConst.ACSP_NEW_SESSION
     _bytes = (
         ('proto_version', UINT8),
         ('session_index', UINT8),

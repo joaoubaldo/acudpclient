@@ -4,7 +4,7 @@ Collection of base classes to be used by packet related classes.
 import logging
 import struct
 
-from acudpclient.protocol import ACUDPProtoTypes
+from acudpclient.protocol import ACUDPConst
 from acudpclient.types import UINT8
 from acudpclient.exceptions import NotEnoughBytes
 
@@ -75,7 +75,7 @@ class ACUDPPacket(object):
 
     def __repr__(self):
         output = "<Packet(%s) %s>" % (
-            ACUDPProtoTypes.id_to_name(self._type),
+            ACUDPConst.id_to_name(self._type),
             ' '.join(["%s='%s'" % (name, repr(getattr(self, name, ''))) \
                     for name, _ in self._bytes])
             )

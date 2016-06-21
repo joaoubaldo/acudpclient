@@ -10,6 +10,10 @@ with open(os.path.join(here, 'README.md')) as f:
 with open(os.path.join(here, 'requirements.txt')) as f:
   requires = f.read().splitlines()
 
+tests_require = requires + [
+    'pylint'
+]
+
 setup(name='acudpclient',
     version=VERSION,
     description='Assetto Corsa UDP Client',

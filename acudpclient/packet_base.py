@@ -19,9 +19,10 @@ class ACUDPPacketMeta(type):
 
     def __new__(mcs, name, bases, dct):
         klass = type.__new__(mcs, name, bases, dct)
+
         if len(klass.mro()[1:-1]) == 1:
             LOG.info("Registered new packet %s", name)
-            mcs.packets[klass._type] = klass
+            mcs.packets[dct.get('_type')] = klass
         return klass
 
 

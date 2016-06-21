@@ -94,8 +94,7 @@ class ACUDPClient(object):
         data = struct.pack("BB%ds" % (size*4,),
                            ACUDPConst.ACSP_BROADCAST_CHAT,
                            size,
-                           message.encode('utf32')
-                          )
+                           message.encode('utf32'))
         sent = self.sock.sendto(data, (self.host, self.remote_port))
         if sent != len(data):
             raise ValueError('Not all bytes were sent.')
@@ -113,8 +112,7 @@ class ACUDPClient(object):
                            ACUDPConst.ACSP_SEND_CHAT,
                            car_id,
                            size,
-                           message.encode('utf32')
-                          )
+                           message.encode('utf32'))
         sent = self.sock.sendto(data, (self.host, self.remote_port))
         if sent != len(data):
             raise ValueError('Not all bytes were sent.')
@@ -126,8 +124,7 @@ class ACUDPClient(object):
         car_id -- the driver id we want """
         data = struct.pack("BB",
                            ACUDPConst.ACSP_GET_CAR_INFO,
-                           car_id
-                          )
+                           car_id)
         sent = self.sock.sendto(data, (self.host, self.remote_port))
         if sent != len(data):
             raise ValueError('Not all bytes were sent.')
@@ -136,11 +133,10 @@ class ACUDPClient(object):
         """ Request SESSION_INFO packet.
 
         Keyword arguments:
-        session_index -- the session we want (default: -1 - current session) """
+        session_index -- the session we want (default: -1 - current session)"""
         data = struct.pack("<Bh",
                            ACUDPConst.ACSP_GET_SESSION_INFO,
-                           session_index
-                          )
+                           session_index)
         sent = self.sock.sendto(data, (self.host, self.remote_port))
         if sent != len(data):
             raise ValueError('Not all bytes were sent.')
@@ -153,8 +149,7 @@ class ACUDPClient(object):
         to disable real time reporting (default: 1000) """
         data = struct.pack("<BH",
                            ACUDPConst.ACSP_REALTIMEPOS_INTERVAL,
-                           hz_ms
-                          )
+                           hz_ms)
         sent = self.sock.sendto(data, (self.host, self.remote_port))
         if sent != len(data):
             raise ValueError('Not all bytes were sent.')

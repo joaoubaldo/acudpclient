@@ -28,6 +28,7 @@ class Version(ACUDPPacket):
         ('proto_version', UINT8),
     )
 
+
 class CarUpdate(ACUDPPacket):
     """Packet"""
     _type = ACUDPConst.ACSP_CAR_UPDATE
@@ -41,16 +42,22 @@ class CarUpdate(ACUDPPacket):
     )
 
 
+def cond_other_car_id(packet):
+    """ Conditional function used by ClientEvent packet. """
+    if packet.ev_type == ACUDPConst.ACSP_CE_COLLISION_WITH_CAR:
+        return True
+    return False
+
+
 class ClientEvent(ACUDPPacket):
     """Packet"""
     _type = ACUDPConst.ACSP_CLIENT_EVENT
+
     _bytes = (
         ('ev_type', UINT8),
         ('car_id', UINT8),
         ('other_car_id', ACUDPConditionalStruct(UINT8,
-                                                cond_func=lambda x: True \
-                if x.ev_type == ACUDPConst.ACSP_CE_COLLISION_WITH_CAR \
-                else False,
+                                                cond_func=cond_other_car_id,
                                                 default=255)),
         ('impact_speed', FLOAT),
         ('world_pos', VECTOR3F),
@@ -70,6 +77,7 @@ class CarInfo(ACUDPPacket):
         ('driver_team', UTF32),
         ('driver_guid', UTF32)
     )
+
 
 class Chat(ACUDPPacket):
     """Packet"""
@@ -99,6 +107,7 @@ class LapCompleted(ACUDPPacket):
         ('cars', ACUDPPacketDataArray(LeaderboardEntry)),
         ('grip_level', FLOAT)
     )
+
 
 class EndSession(ACUDPPacket):
     """Packet"""

@@ -77,8 +77,8 @@ class ACUDPPacket(object):
     def __repr__(self):
         output = "<Packet(%s) %s>" % (
             ACUDPConst.id_to_name(self._type),
-            ' '.join(["%s='%s'" % (name, repr(getattr(self, name, ''))) \
-                    for name, _ in self._bytes])
+            ' '.join(["%s='%s'" % (name, repr(getattr(self, name, '')))
+                      for name, _ in self._bytes])
             )
         return output.encode('utf-8')
 
@@ -104,11 +104,10 @@ class ACUDPPacketData(object):
             setattr(instance, name, val)
         return instance
 
-
     def __repr__(self):
         output = "<%s>" % (
-            ' '.join(["%s='%s'" % (name, repr(getattr(self, name, ''))) \
-                for name, _ in self._bytes]))
+            ' '.join(["%s='%s'" % (name, repr(getattr(self, name, '')))
+                      for name, _ in self._bytes]))
         return output.encode('utf-8')
 
 

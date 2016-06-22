@@ -74,6 +74,10 @@ class ACUDPPacket(object):
             setattr(instance, name, val)
         return instance
 
+    def packet_name(self):
+        """ Return the packet's type name. """
+        return ACUDPConst.id_to_name(self._type)
+
     def __repr__(self):
         output = "<Packet(%s) %s>" % (
             ACUDPConst.id_to_name(self._type),

@@ -8,7 +8,7 @@ import io
 
 from acudpclient.protocol import ACUDPConst
 from acudpclient.packet_base import ACUDPPacket
-
+import acudpclient.packets
 
 logging.basicConfig(level=logging.ERROR)
 LOG = logging.getLogger("ac_udp_client")
@@ -76,8 +76,7 @@ class ACUDPClient(object):
         event = ACUDPPacket.factory(self.file)
         if event and call_subscribers:
             for subs in self._subscribers.itervalues():
-                type_ = ACUDPConst.id_to_name(event['type'])
-                method_name = 'on_%s' % (type_,)
+                method_name = 'on_%s' % (event.packet_name(),)
                 method = getattr(subs, method_name, None)
                 if method and callable(method):
                     method(event)

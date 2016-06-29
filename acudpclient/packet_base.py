@@ -12,25 +12,18 @@ from acudpclient.exceptions import NotEnoughBytes
 LOG = logging.getLogger("ac_udp_packets")
 
 
-class ACUDPPacketMeta(type):
-    """ This is the Metaclass for ACUDPPacket, that tracks all of its
-    subclasses. """
-    packets = {}
-
-    def __new__(mcs, name, bases, dct):
-        klass = type.__new__(mcs, name, bases, dct)
-
-        if len(klass.mro()[1:-1]) == 1:
-            LOG.info("Registered new packet %s", name)
-            mcs.packets[dct.get('_type')] = klass
-        return klass
-
-
 class ACUDPPacket(object):
     """ This is the base class for AC UDP events, having a message type
     and byte data. Type and bytes should be defined at class level by each
     packet. """
-    __metaclass__ = ACUDPPacketMeta
+
+    @classmethod
+    def packets(cls):
+        """ Return a dict of packet classes indexed by type """
+        pkts = {}
+        for subclass in cls.__subclasses__():
+            pkts[subclass._type] = subclass
+        return pkts
 
     @classmethod
     def factory(cls, file_obj):
@@ -48,8 +41,8 @@ class ACUDPPacket(object):
         """
         try:
             type_ = UINT8.get(file_obj)
-            if type_ in ACUDPPacket.packets:
-                class_ = ACUDPPacket.packets[type_]
+            if type_ in ACUDPPacket.packets():
+                class_ = ACUDPPacket.packets()[type_]
                 return class_.from_file(file_obj)
             else:
                 raise NotImplementedError("Type not implemented %s" % (type_,))

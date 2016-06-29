@@ -10,6 +10,12 @@ from acudpclient.exceptions import NotEnoughBytes
 import acudpclient.packets
 
 
+def test_server():
+    import socket
+    s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    s.bind(('0.0.0.0', 10002))
+
+
 class TestClient(unittest.TestCase):
     def test_event_factory(self):
         data = """OAQyBAAAAjFBAAAAQwAAACAAAAAhAAAAIAAAAEoAAABVAAAAIAAAADIAAAA0AAAALgAAADcAAAAg
@@ -25,9 +31,9 @@ class TestClient(unittest.TestCase):
             except NotEnoughBytes:
                 break
             else:
-                print event
                 count += 1
         self.assertEqual(count, 2)
+
 
 if __name__ == '__main__':
     unittest.main()

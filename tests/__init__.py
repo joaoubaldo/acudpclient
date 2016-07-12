@@ -10,12 +10,6 @@ from acudpclient.exceptions import NotEnoughBytes
 import acudpclient.packets
 
 
-def test_server():
-    import socket
-    s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-    s.bind(('0.0.0.0', 10002))
-
-
 class TestClient(unittest.TestCase):
     def test_event_factory(self):
         data = """OAQyBAAAAjFBAAAAQwAAACAAAAAhAAAAIAAAAEoAAABVAAAAIAAAADIAAAA0AAAALgAAADcAAAAg
@@ -33,6 +27,10 @@ class TestClient(unittest.TestCase):
             else:
                 count += 1
         self.assertEqual(count, 2)
+
+    def test_invalid_type(self):
+        file_obj = StringIO("invalid_type")
+        self.assertRaises(NotImplementedError, ACUDPPacket.factory, file_obj)
 
 
 if __name__ == '__main__':

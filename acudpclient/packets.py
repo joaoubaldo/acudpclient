@@ -125,7 +125,7 @@ class ClientLoaded(ACUDPPacket):
     )
 
 
-class ConnectiontClosed(ACUDPPacket):
+class ConnectionClosed(ACUDPPacket):
     """Packet"""
     _type = ACUDPConst.ACSP_CONNECTION_CLOSED
     _bytes = (

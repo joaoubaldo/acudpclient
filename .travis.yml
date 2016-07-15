@@ -7,4 +7,4 @@ install:
 script:
   - python setup.py nosetests
   - pep8 acudpclient
-  - pylint acudpclient
+  - pylint --rcfile=.pylintrc acudpclient

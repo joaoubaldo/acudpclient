@@ -38,7 +38,7 @@ class ACUDPConst(object):
 
         Return constant name.
         """
-        for attr in cls.__dict__.keys():
+        for attr in cls.__dict__:
             if attr.startswith('ACSP_'):
                 if getattr(cls, attr) == id_:
                     return attr

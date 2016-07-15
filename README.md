@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/joaoubaldo/acudpclient.svg?branch=master)](https://travis-ci.org/joaoubaldo/acudpclient)
 
-ACUDPClient is a Python module that can be used to communicate with an Assetto Corsa dedicated server. 
-Using its UDP protocol, real time telemetry, lap timings and session information is pushed to the client. 
+ACUDPClient is a Python module that can be used to communicate with an Assetto Corsa dedicated server.
+Using its UDP protocol, real time telemetry, lap timings and session information is pushed to the client.
 A few actions, like sending/broadcasting messages are also available.
 
 
@@ -41,19 +41,19 @@ client.listen()
 * `listen()` will bind the server socket to `port`.
 
 Server events can be handled directly or by event subscribers. In
-both cases, `get_next_event()` method must be invoked in the 
+both cases, `get_next_event()` method must be invoked in the
 application's main loop.
 
-When handling events directly, a call to `get_next_event()` 
-might return `None`, meaning there's no event available at that 
+When handling events directly, a call to `get_next_event()`
+might return `None`, meaning there's no event available at that
 point (the internal `ACUDPClient` socket is non-blocking).
 
-When creating a subscriber class, specific events can be handled by creating 
+When creating a subscriber class, specific events can be handled by creating
 methods with the following naming scheme `on_<event_type>(self, event)`
 where `event_type` is any of the types found in
-`acudpclient.types.ACUDPProtoTypes` class (see Usage).
+`acudpclient.protocol.ACUDPConst` class (see Usage).
 
-Events passed to `on_<event_type>(self, event)` are dictionaries containing 
+Events passed to `on_<event_type>(self, event)` are dictionaries containing
 different keys depending on the event's type. Refer to `acudpclient.client import ACUDPClient`
 to see which keys are available per event type.
 

@@ -1,5 +1,10 @@
 language: python
 python:
   - "2.7"
-install: "python setup.py install"
-script: nosetests
+install:
+  - pip install pylint
+  - pip install pep8
+script:
+  - python setup.py nosetests
+  - pep8 acudpclient
+  - pylint --rcfile=.pylintrc acudpclient

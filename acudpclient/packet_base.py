@@ -22,7 +22,7 @@ class ACUDPPacket(object):
         """ Return a dict of packet classes indexed by type """
         pkts = {}
         for subclass in cls.__subclasses__():
-            pkts[subclass._type] = subclass
+            pkts[getattr(subclass, '_type')] = subclass
         return pkts
 
     @classmethod

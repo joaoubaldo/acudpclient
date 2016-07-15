@@ -8,7 +8,6 @@ import io
 
 from acudpclient.protocol import ACUDPConst
 from acudpclient.packet_base import ACUDPPacket
-import acudpclient.packets
 
 logging.basicConfig(level=logging.ERROR)
 LOG = logging.getLogger("ac_udp_client")

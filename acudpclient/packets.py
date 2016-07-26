@@ -12,10 +12,10 @@ from acudpclient.types import VECTOR3F
 from acudpclient.types import UTF32
 from acudpclient.types import ASCII
 from acudpclient.types import ACUDPConditionalStruct
+from acudpclient.types import ACUDPPacketDataArray
 from acudpclient.protocol import ACUDPConst
 from acudpclient.packet_base import ACUDPPacket
 from acudpclient.packet_base import ACUDPPacketData
-from acudpclient.packet_base import ACUDPPacketDataArray
 
 
 LOG = logging.getLogger("ac_udp_packets")
@@ -93,7 +93,8 @@ class LeaderboardEntry(ACUDPPacketData):
     _bytes = (
         ('rcar_id', UINT8),
         ('rtime', UINT32),
-        ('rlaps', UINT16)
+        ('rlaps', UINT16),
+        ('has_completed_flag', BOOL)
     )
 
 

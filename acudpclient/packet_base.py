@@ -63,7 +63,7 @@ class ACUDPPacket(object):
         """
         instance = cls()
         for name, data_type in cls._bytes:
-            val = data_type.get(file_obj)
+            val = data_type.get(file_obj, instance)
             setattr(instance, name, val)
         return instance
 
@@ -106,24 +106,3 @@ class ACUDPPacketData(object):
             ' '.join(["%s='%s'" % (name, repr(getattr(self, name, '')))
                       for name, _ in self._bytes]))
         return output.encode('utf-8')
-
-
-class ACUDPPacketDataArray(object):
-    """ This class represents an array of packet data (ACUDPPacketData). """
-    def __init__(self, packet_data):
-        self.packet_data = packet_data
-
-    def get(self, file_obj):
-        """ Reads next byte as a byte representing the total number of packet
-        data blocks that exist in the buffer and reads them.
-
-        Keyword arguments:
-        file_obj -- file-like object to read bytes from
-
-        Return list of read ACUDPPacketData blocks.
-        """
-        size = UINT8.get(file_obj)
-        res = []
-        for _ in range(size):
-            res.append(self.packet_data.from_file(file_obj))
-        return res

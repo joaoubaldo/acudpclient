@@ -20,7 +20,7 @@ class ACUDPStruct(object):
         """ Return computed size in bytes of self.fmt string """
         return struct.calcsize(self.fmt)
 
-    def get(self, file_obj):
+    def get(self, file_obj, context=None):
         """ Read self.size() bytes from a file-like object and unpack them
         with self.fmt.
 
@@ -49,7 +49,7 @@ class ACUDPString(object):
         self.char_size = char_size
         self.decoder = decoder
 
-    def get(self, file_obj):
+    def get(self, file_obj, context=None):
         """ Read a string from a file-like object.
         First reads a byte that tells the string length (255 max char limit).
         It then reads the actual string.
@@ -97,6 +97,26 @@ class ACUDPConditionalStruct(object):
             return self.default
         return self.ac_struct.get(file_obj, context)
 
+
+class ACUDPPacketDataArray(object):
+    """ This class represents an array of packet data (ACUDPPacketData). """
+    def __init__(self, packet_data):
+        self.packet_data = packet_data
+
+    def get(self, file_obj, context=None):
+        """ Reads next byte as a byte representing the total number of packet
+        data blocks that exist in the buffer and reads them.
+
+        Keyword arguments:
+        file_obj -- file-like object to read bytes from
+
+        Return list of read ACUDPPacketData blocks.
+        """
+        size = UINT8.get(file_obj)
+        res = []
+        for _ in range(size):
+            res.append(self.packet_data.from_file(file_obj))
+        return res
 
 UINT8 = ACUDPStruct('B')
 BOOL = ACUDPStruct('B', formatter=lambda x: x != 0)

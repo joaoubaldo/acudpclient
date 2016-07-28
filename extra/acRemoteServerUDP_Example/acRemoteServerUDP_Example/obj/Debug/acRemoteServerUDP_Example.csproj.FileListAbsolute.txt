@@ -1,0 +1,6 @@
+D:\dev\devkn5\acRemoteServerUDP_Example\acRemoteServerUDP_Example\bin\Debug\acRemoteServerUDP_Example.exe.config
+D:\dev\devkn5\acRemoteServerUDP_Example\acRemoteServerUDP_Example\obj\Debug\acRemoteServerUDP_Example.csprojResolveAssemblyReference.cache
+D:\dev\devkn5\acRemoteServerUDP_Example\acRemoteServerUDP_Example\bin\Debug\acRemoteServerUDP_Example.exe
+D:\dev\devkn5\acRemoteServerUDP_Example\acRemoteServerUDP_Example\bin\Debug\acRemoteServerUDP_Example.pdb
+D:\dev\devkn5\acRemoteServerUDP_Example\acRemoteServerUDP_Example\obj\Debug\acRemoteServerUDP_Example.exe
+D:\dev\devkn5\acRemoteServerUDP_Example\acRemoteServerUDP_Example\obj\Debug\acRemoteServerUDP_Example.pdb

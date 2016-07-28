@@ -12,18 +12,11 @@ import acudpclient.packets
 
 class TestClient(unittest.TestCase):
     def test_event_factory(self):
-        data = """OAQyBAAAAjFBAAAAQwAAACAAAAAhAAAAIAAAAEoAAABVAAAAIAAAADIAAAA0AAAALgAAADcAAAAg
-            AAAAIQAAACAAAAAzAAAAMAAAAHEAAAB1AAAAYQAAAGwAAABpAAAAIAAAACEAAAAgAAAANwAAAHIA
-            AABhAAAAYwAAAGUAAAAgAAAAIQAAACAAAABmAAAAYQAAAGMAAAB0AAAAbwAAAHIAAAB5AAAAIAAA
-            AHQAAABjAAAAIAAAACYAAAAgAAAAYQAAAGIAAABzAAAABW1vbnphAAdRdWFsaWZ5Ah4AAAAAABkg
-            BzNfY2xlYXIAAAAA"""
-        file_obj = StringIO(base64.b64decode(data))
         file_obj = open('tests/ac_out', 'rb')
         count = 0
         while 1:
             try:
                 event = ACUDPPacket.factory(file_obj)
-                print event
             except NotEnoughBytes:
                 break
             else:

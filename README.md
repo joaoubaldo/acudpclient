@@ -27,6 +27,23 @@ $ pip install acudpclient
 $ nosetests
 ```
 
+### Capturing real data for testing purposes
+
+1. Start the ACServer with UDP active.
+
+2. Capture the data using `tcpdump`:
+```bash
+$ tcpdump -w /tmp/ac_out.pcap -s0 -i lo -n udp dst port 10000
+```
+
+3. Extract all udp payload from the pcap file:
+```bash
+$ tshark -r /tmp/ac_out.pcap -T fields -e data | tr -d '\n' | perl -pe 's/([0-9a-f]{2})/chr hex $1/gie' > /tmp/ac_out
+```
+
+4. `/tmp/ac_out` contains binary data sent by ACServer.
+
+
 ## Usage
 
 The client should be initialized like this:

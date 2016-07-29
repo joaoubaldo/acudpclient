@@ -10,12 +10,11 @@ with open(os.path.join(here, 'README.md')) as f:
 with open(os.path.join(here, 'requirements.txt')) as f:
   requires = f.read().splitlines()
 
-version =  "%s-%s" % (VERSION, os.getenv('BUILD_NUMBER', '1'),)
-print version
-
 tests_require = requires + [
     'pylint'
 ]
+
+version = os.getenv('BUILD_VERSION', VERSION)
 
 setup(name='acudpclient',
     version=version,

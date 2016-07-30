@@ -1,3 +1,4 @@
+import os
 import sys
 import base64
 from StringIO import StringIO
@@ -12,7 +13,9 @@ import acudpclient.packets
 
 class TestClient(unittest.TestCase):
     def test_event_factory(self):
-        file_obj = open('tests/ac_out', 'rb')
+        raw_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                'ac_out')
+        file_obj = open(raw_file, 'rb')
         count = 0
         while 1:
             try:

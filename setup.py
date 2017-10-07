@@ -24,7 +24,7 @@ setup(name='acudpclient',
         "Programming Language :: Python"
     ],
     author='Joao Coutinho',
-    author_email='me at joaoubaldo.com',
+    author_email='me@joaoubaldo.com',
     url='https://b.joaoubaldo.com',
     keywords='assetto-corsa dedicated-server client udp',
     packages=find_packages(),

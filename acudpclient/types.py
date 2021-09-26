@@ -120,6 +120,7 @@ class ACUDPPacketDataArray(object):
             res.append(self.packet_data.from_file(file_obj))
         return res
 
+
 UINT8 = ACUDPStruct('B')
 BOOL = ACUDPStruct('B', formatter=lambda x: x != 0)
 UINT16 = ACUDPStruct('H')

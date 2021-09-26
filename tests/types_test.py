@@ -3,14 +3,13 @@ from io import StringIO
 import pytest 
 
 from acudpclient.protocol import ACUDPConst
-from acudpclient.packet_base import ACUDPPacket
-import acudpclient.packets
+from acudpclient import packet_base
 
 
 def test_fail_with_invalid_type():
     file_obj = StringIO(u"invalid_type")
     with pytest.raises(NotImplementedError):
-        ACUDPPacket.factory(file_obj)
+        packet_base.ACUDPPacket.factory(file_obj)
 
 def test_pass_with_valid_types():
     p = """ACSP_CAR_INFO        CarInfo
@@ -31,6 +30,6 @@ def test_pass_with_valid_types():
         fields = type_class.strip().split(" ")
         fields[0], fields[-1]
         const = getattr(ACUDPConst, fields[0])
-        class_ = getattr(acudpclient.packets, fields[-1])
-        assert const in ACUDPPacket.packets()
-        assert class_ == ACUDPPacket.packets().get(const)
+        class_ = getattr(packet_base, fields[-1])
+        assert const in packet_base.ACUDPPacket.packets()
+        assert class_ == packet_base.ACUDPPacket.packets().get(const)

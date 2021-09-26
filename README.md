@@ -75,41 +75,6 @@ to see which keys are available per event type.
 
 ## Examples
 
-Handle events directly:
-```python
-from acudpclient.client import ACUDPClient
+Handle events directly: `examples/print_events.py`
 
-client = ACUDPClient(port=10000, remote_port=10001)
-client.listen()
-
-client.get_session_info()
-
-while True:
-  event = client.get_next_event(call_subscribers=False)
-  print(event)
-```
-
-
-Handle events with a subscriber:
-```python
-from acudpclient.client import ACUDPClient
-
-class ACEventHandler(object):
-  def on_ACSP_LAP_COMPLETED(self, event):
-    print(event)
-
-  def on_ACSP_NEW_SESSION(self, event):
-    print(event)
-
-  def on_ACSP_NEW_CONNECTION(self, event):
-    print(event)
-
-
-handler = ACEventHandler()
-client = ACUDPClient(port=10000, remote_port=10001)
-client.listen()
-client.subscribe(handler)
-
-while True:
-  client.get_next_event()
-```
+Handle events with a subscriber: `examples/print_events_pubsub.py`

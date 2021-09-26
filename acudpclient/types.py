@@ -1,5 +1,6 @@
 """ This module declares core C types used by AC UDP protocol """
 import struct
+import sys
 
 
 class ACUDPStruct(object):
@@ -30,8 +31,11 @@ class ACUDPStruct(object):
         Return output of self.formatter (default: string with read bytes).
         """
         bytes_ = file_obj.read(self.size())
-        if type(bytes_) == str:
-            bytes_ = bytes(bytes_, 'ascii')
+        if isinstance(bytes_, str):
+            if sys.version_info < (3, 0):
+                bytes_ = bytes(bytes_)
+            else:
+                bytes_ = bytes(bytes_, 'utf8')
         data = struct.unpack(self.fmt, bytes_)
         if len(data) == 1:
             return self.formatter(data[0])

@@ -8,7 +8,7 @@ import acudpclient.packets
 
 
 def test_fail_with_invalid_type():
-    file_obj = StringIO("invalid_type")
+    file_obj = StringIO(u"invalid_type")
     with pytest.raises(NotImplementedError):
         ACUDPPacket.factory(file_obj)
 

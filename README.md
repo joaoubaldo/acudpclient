@@ -19,12 +19,10 @@ or
 $ pip install acudpclient
 ```
 
-(virtualenv is recommended)
-
 
 ## Testing
 ```bash
-$ nosetests
+$ pytest
 ```
 
 ### Capturing real data for testing purposes

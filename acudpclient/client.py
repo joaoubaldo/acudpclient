@@ -45,7 +45,7 @@ class ACUDPClient(object):
 
         Return True if the subscriber is successfuly registered,
         False if it's already registered. """
-        if id(subscriber) in self._subscribers.keys():
+        if id(subscriber) in list(self._subscribers.keys()):
             return False
         self._subscribers[id(subscriber)] = subscriber
         return True
@@ -58,7 +58,7 @@ class ACUDPClient(object):
 
         Return True if the subscriber is successfuly removed,
         False if the subscriber is found. """
-        if id(subscriber) not in self._subscribers.keys():
+        if id(subscriber) not in list(self._subscribers.keys()):
             return False
         del self._subscribers[id(subscriber)]
         return True
@@ -74,7 +74,7 @@ class ACUDPClient(object):
         no event ready. """
         event = ACUDPPacket.factory(self.file)
         if event and call_subscribers:
-            for subs in self._subscribers.itervalues():
+            for subs in self._subscribers.values():
                 method_name = 'on_%s' % (event.packet_name(),)
                 method = getattr(subs, method_name, None)
                 if method and callable(method):

@@ -1,6 +1,5 @@
 import sys
 
-from acudpclient import packets
 from acudpclient.packet_base import ACUDPPacket
 from acudpclient.exceptions import NotEnoughBytes
 
@@ -12,6 +11,6 @@ f = open(sys.argv[1], 'rb')
 while 1:
     try:
         event = ACUDPPacket.factory(f)
-        print event
+        print(event)
     except NotEnoughBytes:
         break

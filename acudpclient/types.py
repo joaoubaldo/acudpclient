@@ -30,6 +30,8 @@ class ACUDPStruct(object):
         Return output of self.formatter (default: string with read bytes).
         """
         bytes_ = file_obj.read(self.size())
+        if type(bytes_) == str:
+            bytes_ = bytes(bytes_, 'ascii')
         data = struct.unpack(self.fmt, bytes_)
         if len(data) == 1:
             return self.formatter(data[0])

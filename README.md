@@ -88,7 +88,7 @@ client.get_session_info()
 
 while True:
   event = client.get_next_event(call_subscribers=False)
-  print event
+  print(event)
 ```
 
 
@@ -98,13 +98,13 @@ from acudpclient.client import ACUDPClient
 
 class ACEventHandler(object):
   def on_ACSP_LAP_COMPLETED(self, event):
-    print event
+    print(event)
 
   def on_ACSP_NEW_SESSION(self, event):
-    print event
+    print(event)
 
   def on_ACSP_NEW_CONNECTION(self, event):
-    print event
+    print(event)
 
 
 handler = ACEventHandler()

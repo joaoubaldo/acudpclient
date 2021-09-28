@@ -19,28 +19,10 @@ or
 $ pip install acudpclient
 ```
 
-
 ## Testing
 ```bash
 $ pytest
 ```
-
-### Capturing real data for testing purposes
-
-1. Start the ACServer with UDP active.
-
-2. Capture the data using `tcpdump`:
-```bash
-$ tcpdump -w /tmp/ac_out.pcap -s0 -i lo -n udp dst port 10000
-```
-
-3. Extract all udp payload from the pcap file:
-```bash
-$ tshark -r /tmp/ac_out.pcap -T fields -e data | tr -d '\n' | perl -pe 's/([0-9a-f]{2})/chr hex $1/gie' > /tmp/ac_out
-```
-
-4. `/tmp/ac_out` contains binary data sent by ACServer.
-
 
 ## Usage
 
@@ -78,3 +60,20 @@ to see which keys are available per event type.
 Handle events directly: `examples/print_events.py`
 
 Handle events with a subscriber: `examples/print_events_pubsub.py`
+
+
+### Capturing real data for testing purposes
+
+1. Start the ACServer with UDP active.
+
+2. Capture the data using `tcpdump`:
+```bash
+$ tcpdump -w /tmp/ac_out.pcap -s0 -i lo -n udp dst port 10000
+```
+
+3. Extract all udp payload from the pcap file:
+```bash
+$ tshark -r /tmp/ac_out.pcap -T fields -e data | tr -d '\n' | perl -pe 's/([0-9a-f]{2})/chr hex $1/gie' > /tmp/ac_out
+```
+
+4. `/tmp/ac_out` contains binary data sent by ACServer.
